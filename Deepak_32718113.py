@@ -30,7 +30,7 @@ while True:
                 file_name = os.path.join(p, i)
                 file_time = os.path.getctime(file_name)
                 if file_time > diff:
-                    print(i, "\twas created on\t", ctime(file_time))
+                    print(i, "\t\twas created on", ctime(file_time))
                     time_list.append(file_time)
                     file_list.append(file_name)
                     access_list.append(ctime(os.path.getatime(file_name)))
@@ -44,14 +44,15 @@ while True:
 
                 wb = x.Workbook()
                 ws = wb.add_sheet("List of Files")
-                ws.write(0, 0, "Date of the Exercise : {0}".format(ctime(today.timestamp())))
-                ws.write(1, 0, "Date {0} days ago : {1}".format(days, ctime(diff))) 
-                ws.write(2, 0, "File Name")
-                ws.write(2, 1, "File Size")
-                ws.write(2, 2, "File Created Time")
-                ws.write(2, 3, "Last Modified Time")
-                ws.write(2, 4, "Last Accessed Time")
-                ws.write(2, 5, "Days passed in between")
+                style = x.easyxf('font:bold on')
+                ws.write(0, 0, "Date of the Exercise : {0}".format(ctime(today.timestamp())), style = style)
+                ws.write(1, 0, "Date {0} days ago : {1}".format(days, ctime(diff)), style = style) 
+                ws.write(2, 0, "Fully qualified File Name", style = style)
+                ws.write(2, 1, "File Size", style = style)
+                ws.write(2, 2, "File Created Time", style = style)
+                ws.write(2, 3, "Last Modified Time", style = style)
+                ws.write(2, 4, "Last Accessed Time", style = style)
+                ws.write(2, 5, "Days passed in between", style = style)
                 for i in range(len(time_list)):
                     ws.write(i+3, 0, file_list[i])
                     ws.write(i+3, 1, "{0} bytes".format(size_list[i]))
@@ -69,18 +70,18 @@ while True:
                         save_name = input("Enter the workbook name (Without extension)  : ")
                         wb.save(os.path.join(save_path, save_name) + ".xls")
                     except OSError:
-                        print("Can't use special characters while naming files. Please rename your file")
+                        print("Can't use special characters while naming files [or] File is currently in use. Please rename your file")
                         continue
                     else:
                         break
         else:
             print("\nNo files created in {0} during the past {1} days".format(root_path, days))
-        cont = input("\nDo you want to check for files created within a different period in the same path? {y/n)")
+        cont = input("\nDo you want to check for files created within a different period in the same path? (y/n)")
         if cont == 'y' or cont == 'Y':
             continue
         else:
             break
-    cont = input("\nDo you want to check in a different path? {y/n)")
+    cont = input("\nDo you want to check in a different path? (y/n)")
     if cont == 'y' or cont == 'Y':
         continue
     else:
